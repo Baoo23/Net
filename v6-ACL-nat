@@ -1,0 +1,53 @@
+>EIGRPV6 იგივე EIGRPV3
+>ipv6 unicast-routing
+>ipv6 router eigrp {num}
+>eigrp router-id {1.1.1.1}
+>no sh
+>exit
+>int {outbound and inbound interfaces}
+>ipv6 eigrp {num}
+>no sh
+________________________________________
+>OSPFV6 იგივე OSPFV3
+>ipv6 unicast-routing
+>ipv6 router ospf {num}
+>router-id {num.num.num.num}
+>exit
+___________
+
+>int {outbound and inbound interfaces}
+>ipv6 ospf 1 area {num}
+>exit
+_____________________________________
+ACL
+>en
+>conf t
+>access-list {num} deny {ip&wildcard}
+>int{outbound or inbound}
+>ip access-group {num} out/in
+>exit
+>access-list {num} permit any
+______________________________________
+
+access-list 10 deny 192.168.1.0 0.0.0.255
+access-list 10 permit 192.168.3.0 0.0.0.255
+access-list 10 permit 192.168.4.0 0.0.0.255
+
+access-list 10 deny 192.168.3.0 0.0.0.255
+access-list 10 permit 192.168.1.0 0.0.0.255
+access-list 10 permit 192.168.2.0 0.0.0.255
+
+_______________________________________
+
+
+
+GIG0/1 
+ip nat insaide
+exit
+GIG0/0 
+Ip nat outside
+Exit
+შემდეგ მოვნიშნავთ ქსელს რომელიც უნდა გადაითარგმნოს გარე ip მისამართში
+Config t
+Acces-list  1 permit 192.168.5.0 0.0.0.255
+ip nat inside source list 1 interface gigabitEthernet 0/0 overload
